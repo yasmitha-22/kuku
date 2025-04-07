@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Daily Soundtrack - Kuku FM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #ff7b54, #ffb26b);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .title {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .mood-btns {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .mood-btns button {
+      font-size: 32px;
+      padding: 15px;
+      background-color: #fff;
+      border: 2px solid #ff7b54;
+      border-radius: 50%;
+      width: 65px;
+      height: 65px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .mood-btns button:hover {
+      transform: scale(1.2);
+      background-color: #ffe0b2;
+    }
+    .next-btn {
+      margin-top: 30px;
+      padding: 10px 25px;
+      background-color: #fff;
+      color: #ff7b54;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    .next-btn:hover {
+      background-color: #ffe0b2;
+    }
+    .hidden {
+      display: none;
+    }
+    .feature-box {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 15px;
+      border-radius: 15px;
+      margin-top: 20px;
+      text-align: left;
+    }
+    .feature-box h4 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #fff7f0;
+    }
+    .feature-box ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="moodScreen">
+    <h2 class="title">Hey Yasmitha! How are you feeling today? 😊</h2>
+    <div class="mood-btns">
+      <button onclick="selectMood('happy')" title="Happy">😊</button>
+      <button onclick="selectMood('neutral')" title="Neutral">😐</button>
+      <button onclick="selectMood('sad')" title="Sad">😢</button>
+      <button onclick="selectMood('angry')" title="Angry">😡</button>
+      <button onclick="selectMood('tired')" title="Tired">😴</button>
+    </div>
+    <button class="next-btn hidden" id="startBtn" onclick="showSoundtrack()">Start My Soundtrack</button>
+  </div>
+
+  <div class="container hidden" id="soundtrackScreen">
+    <h2 class="title">Your Soundtrack is Ready 🎧</h2>
+    <p id="introText">Hey Yasmitha, let's start your day right!</p>
+    <ul id="suggestions" style="text-align: left; margin-top: 20px;"></ul>
+    <div class="feature-box">
+      <h4>⭐ New Features:</h4>
+      <ul>
+        <li>⏰ Set daily listening reminder at preferred time</li>
+        <li>🔄 Streak tracker with rewards after 3, 5, 10 days</li>
+      </ul>
+    </div>
+    <button class="next-btn" onclick="location.reload()">Refresh</button>
+  </div>
+
+  <script>
+    let selectedMood = '';
+
+    const moodSuggestions = {
+      happy: [
+        '📘 Book Summary: The Power of Now',
+        '💬 Uplifting Quote: "Happiness is not by chance, but by choice."',
+        '💛 Joyful Short Story: The Golden Surprise',
+        '🌟 Affirmation: “Today is going to be a great day!”',
+        '🎶 Energetic Audio Clip: Morning Boost Mix'
+      ],
+      neutral: [
+        '📘 Book Summary: Deep Work',
+        '💬 Balanced Quote: "Be here now. Be someplace else later."',
+        '📖 Story: The Calm Before the Storm',
+        '🌟 Affirmation: “I am centered and grounded.”',
+        '🎧 Lo-Fi Focus Audio: 5 mins'
+      ],
+      sad: [
+        '📘 Book Summary: The Gifts of Imperfection',
+        '💬 Comforting Quote: "This too shall pass."',
+        '💙 Heartfelt Story: The Kindness Stranger',
+        '🌟 Affirmation: “I am healing and growing every day.”',
+        '🎶 Soft Soothing Audio Clip: Peace Within'
+      ],
+      angry: [
+        '📘 Book Summary: Emotional Intelligence',
+        '💬 Calming Quote: "Speak when you are angry, and you will make the best speech you’ll ever regret."',
+        '🔥 Reflective Story: Sparks and Silence',
+        '🌟 Affirmation: “I choose peace over anger.”',
+        '🎧 Breathing Meditation: 3 mins'
+      ],
+      tired: [
+        '📘 Book Summary: Why We Sleep',
+        '💬 Restorative Quote: "Rest is not idle, it’s productive."',
+        '🛏️ Cozy Story: Pillow Tales',
+        '🌟 Affirmation: “I allow myself to rest and recharge.”',
+        '🎶 Sleepy Soundtrack: Calm Nights'
+      ]
+    };
+
+    function selectMood(mood) {
+      selectedMood = mood;
+      document.getElementById('startBtn').classList.remove('hidden');
+    }
+
+    function showSoundtrack() {
+      const suggestionList = document.getElementById('suggestions');
+      suggestionList.innerHTML = '';
+      moodSuggestions[selectedMood].forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        suggestionList.appendChild(li);
+      });
+
+      document.getElementById('moodScreen').classList.add('hidden');
+      document.getElementById('soundtrackScreen').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
